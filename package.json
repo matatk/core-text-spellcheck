@@ -1,0 +1,35 @@
+{
+  "name": "core-text-spellcheck",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Basic text spell-checker",
+  "keywords": [
+    "basic",
+    "core",
+    "spell",
+    "spell-check",
+    "spellcheck",
+    "spelling",
+    "text"
+  ],
+  "license": "MIT",
+  "author": "Matthew Tylee Atkinson",
+  "main": "index.js",
+  "scripts": {
+    "precommit": "npm test",
+    "example": "node example.js -fd",
+    "test": "eslint . && jest"
+  },
+  "dependencies": {
+    "spellchecker": "~3.4"
+  },
+  "devDependencies": {
+    "eslint": "~4.16",
+    "husky": "~0.14",
+    "jest": "~22.1",
+    "yargs": "~11.0"
+  },
+  "jest": {
+    "collectCoverage": true
+  }
+}
