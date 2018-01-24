@@ -1,4 +1,7 @@
 'use strict'
+function capitalise(word) {
+	return word.charAt(0).toUpperCase() + word.slice(1)
+}
 
 describe('options-checking', () => {
 	it('throws when no options are specified', () => {
@@ -57,49 +60,39 @@ describe('options-checking', () => {
 		}).not.toThrow()
 	})
 
-	it('throws if options.log is neither null nor a function', () => {
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				log: 42
-			})
-		}).toThrow(Error('Log callback is neither null nor a function.'))
+	for (const setting of ['log', 'filter']) {
+		describe(`checks if ${setting} is neither null nor a function`, () => {
+			let options
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				log: null
+			beforeEach(() => {
+				options = {
+					errors: () => {},
+					warnings: () => {},
+				}
 			})
-		}).not.toThrow()
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				log: () => {}
+			it(`throws if ${setting} is a number`, () => {
+				options[setting] = 42
+				expect(() => {
+					require('./')(options)
+				}).toThrow(Error(`${capitalise(setting)} callback is neither null nor a function.`))
 			})
-		}).not.toThrow()
-	})
 
-	it('throws if options.filter is not a function', () => {
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				filter: 42
+			it(`doesn't throw if ${setting} is null`, () => {
+				options[setting] = null
+				expect(() => {
+					require('./')(options)
+				}).not.toThrow()
 			})
-		}).toThrow(Error('Filter callback is not a function.'))
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				filter: () => {}
+			it(`doesn't throw if ${setting} is a function`, () => {
+				options[setting] = () => {}
+				expect(() => {
+					require('./')(options)
+				}).not.toThrow()
 			})
-		}).not.toThrow()
-	})
+		})
+	}
 
 	it('throws if validWords is not an array', () => {
 		expect(() => {
@@ -116,7 +109,7 @@ describe('options-checking', () => {
 				warnings: () => {},
 				validWords: []
 			})
-		}).toThrow(Error('validWords array is empty.'))
+		}).not.toThrow()
 
 		expect(() => {
 			require('./')({
@@ -142,7 +135,7 @@ describe('options-checking', () => {
 				warnings: () => {},
 				warnWords: []
 			})
-		}).toThrow(Error('warnWords array is empty.'))
+		}).not.toThrow()
 
 		expect(() => {
 			require('./')({
