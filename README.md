@@ -3,7 +3,7 @@ core-text-spellcheck
 
 [![Build Status](https://travis-ci.org/matatk/core-text-spellcheck.svg?branch=master)](https://travis-ci.org/matatk/core-text-spellcheck)
 
-This is a basic spell-checking library that can check the spelling of text. It is used as the basis for [markdown-it-spellcheck](https://github.com/matatk/markdown-it-spellcheck) and [html-spellcheck](https://github.com/matatk/html-spellcheck).
+This is a basic spell-checking wrapper (for [spellchecker/hunspell](https://github.com/atom/node-spellchecker)) that can check the spelling of plain text. It is used as the basis for [markdown-it-spellcheck](https://github.com/matatk/markdown-it-spellcheck) and [html-spellcheck](https://github.com/matatk/html-spellcheck).
 
 It gives you callbacks that you can use to track any spelling errors or warnings. You can also add words to the custom dictionary, and set up a filter function to allow some pre-processing.
 

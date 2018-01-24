@@ -10,8 +10,10 @@ function checkOptions(options) {
 		throw Error('Non-object options specified.')
 	}
 
+	// Which options must be present? If they are not required, then they can
+	// be null (so it's easy to set declaratively in the options object when
+	// the plugin is loaded).
 	const optionsRequired = {
-		// Which options must be present?
 		'errors': true,
 		'warnings': true,
 		'log': false,
@@ -20,15 +22,13 @@ function checkOptions(options) {
 
 	for (const option in optionsRequired) {
 		if (options.hasOwnProperty(option)) {
-			// Everything other than options.log must be a function if present;
-			// options.log can be null or a function (so it's easy to set
-			// declaratively in the options object when the plugin is loaded).
-			if (option !== 'log'
+			if (optionsRequired[option]
 				&& typeof options[option] !== 'function') {
 				throw Error(`${capitalise(option)} callback is not a function.`)
-			} else if (option === 'log'
-				&& options.log !== null && typeof options.log !== 'function') {
-				throw Error('Log callback is neither null nor a function.')
+			} else if (!optionsRequired[option]
+				&& options[option] !== null
+				&& typeof options[option] !== 'function') {
+				throw Error(`${capitalise(option)} callback is neither null nor a function.`)
 			}
 		} else if (optionsRequired[option]) {
 			throw Error(`No ${option} callback specified.`)
@@ -39,8 +39,6 @@ function checkOptions(options) {
 		if (options.hasOwnProperty(wordList)) {
 			if (!Array.isArray(options[wordList])) {
 				throw Error(`${wordList} is not an array.`)
-			} else if (options[wordList].length === 0) {
-				throw Error(`${wordList} array is empty.`)
 			}
 		}
 	}
@@ -89,8 +87,6 @@ function incorrectlySpelledWords(text) {
 
 
 module.exports = (options) => {
-	// Set-up...
-
 	checkOptions(options)
 
 	const log = options.hasOwnProperty('log') && options.log ?

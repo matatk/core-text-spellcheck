@@ -13,12 +13,12 @@ const argv = require('yargs')
 	.alias('h', 'help')
 	.argv
 
-function findErrorsInFile(spellCore, fileName) {
+function findErrorsInFile(spell, fileName) {
 	if (argv.filenames) {
 		console.log(`Checking file: "${fileName}"...`)
 	}
 
-	spellCore.check(fs.readFileSync(fileName).toString())
+	spell.check(fs.readFileSync(fileName).toString())
 }
 
 function main() {
