@@ -16,49 +16,39 @@ describe('options-checking', () => {
 		}).toThrow(Error('Non-object options specified.'))
 	})
 
-	it('throws when no errors callback is specified', () => {
-		expect(() => {
-			require('./')({
-				warnings: () => {}
-			})
-		}).toThrow(Error('No errors callback specified.'))
+	for (const setting of ['errors', 'warnings']) {
+		describe(`checks if ${setting} callback is not a function`, () => {
+			let options
 
-		expect(() => {
-			require('./')({
-				warnings: () => {},
-				errors: 42
+			beforeEach(() => {
+				if (setting === 'errors') {
+					options = { warnings: () => {} }
+				} else {
+					options = { errors: () => {} }
+				}
 			})
-		}).toThrow(Error('Errors callback is not a function.'))
 
-		expect(() => {
-			require('./')({
-				warnings: () => {},
-				errors: () => {}
+			it(`throws when no ${setting} callback is given`, () => {
+				expect(() => {
+					require('./')(options)
+				}).toThrow(Error(`No ${setting} callback specified.`))
 			})
-		}).not.toThrow()
-	})
 
-	it('throws when no warnings callback is specified', () => {
-		expect(() => {
-			require('./')({
-				errors: () => {}
+			it(`throws when ${setting} is not a function`, () => {
+				options[setting] = 42
+				expect(() => {
+					require('./')(options)
+				}).toThrow(Error(`${capitalise(setting)} callback is not a function.`))
 			})
-		}).toThrow(Error('No warnings callback specified.'))
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: 42
+			it(`doesn't throw when ${setting} is a function`, () => {
+				options[setting] = () => {}
+				expect(() => {
+					require('./')(options)
+				}).not.toThrow()
 			})
-		}).toThrow(Error('Warnings callback is not a function.'))
-
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {}
-			})
-		}).not.toThrow()
-	})
+		})
+	}
 
 	for (const setting of ['log', 'filter']) {
 		describe(`checks if ${setting} is neither null nor a function`, () => {
@@ -85,7 +75,7 @@ describe('options-checking', () => {
 				}).not.toThrow()
 			})
 
-			it(`doesn't throw if ${setting} is a function`, () => {
+			it(`doesn't throw when ${setting} is a function`, () => {
 				options[setting] = () => {}
 				expect(() => {
 					require('./')(options)
@@ -94,57 +84,46 @@ describe('options-checking', () => {
 		})
 	}
 
-	it('throws if validWords is not an array', () => {
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				validWords: 42
-			})
-		}).toThrow(Error('validWords is not an array.'))
+	for (const list of ['validWords', 'warnWords']) {
+		describe(`checks ${list} is either not given or is an array`, () => {
+			let options
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				validWords: []
+			beforeEach(() => {
+				options = {
+					errors: () => {},
+					warnings: () => {},
+				}
 			})
-		}).not.toThrow()
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				validWords: ['forty-two']
+			it(`doesn't throw if ${list} is not specified`, () => {
+				options[list] = []
+				expect(() => {
+					require('./')(options)
+				}).not.toThrow()
 			})
-		}).not.toThrow()
-	})
 
-	it('throws if warnWords is not an array', () => {
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				warnWords: 42
+			it(`throws if ${list} is not an array`, () => {
+				options[list] = 42
+				expect(() => {
+					require('./')(options)
+				}).toThrow(Error(`${list} is not an array.`))
 			})
-		}).toThrow(Error('warnWords is not an array.'))
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				warnWords: []
+			it(`doesn't throw if ${list} is an emmpty array`, () => {
+				options[list] = []
+				expect(() => {
+					require('./')(options)
+				}).not.toThrow()
 			})
-		}).not.toThrow()
 
-		expect(() => {
-			require('./')({
-				errors: () => {},
-				warnings: () => {},
-				warnWords: ['forty-two']
+			it(`doesn't throw if ${list} is a populated array`, () => {
+				options[list] = ['forty-two']
+				expect(() => {
+					require('./')(options)
+				}).not.toThrow()
 			})
-		}).not.toThrow()
-	})
+		})
+	}
 })
 
 describe('spell-checking', () => {

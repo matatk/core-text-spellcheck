@@ -87,8 +87,6 @@ function incorrectlySpelledWords(text) {
 
 
 module.exports = (options) => {
-	// Set-up...
-
 	checkOptions(options)
 
 	const log = options.hasOwnProperty('log') && options.log ?
