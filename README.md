@@ -11,7 +11,7 @@ A command-line spell-checker, [core-text-spellcheck-cli](https://github.com/mata
 
 ```javascript
 const fs = require('fs')
-const sc = require('core-text-spellcheck')({
+const spellCheck = require('core-text-spellcheck')({
 		errors: (errors) => {
 			console.log(`Errors: ${errors.join(', ')}`)
 		},
@@ -24,7 +24,7 @@ const sc = require('core-text-spellcheck')({
 		// filter: null
 	})
 
-sc.check(fs.readFileSync('example.txt').toString())
+spellCheck(fs.readFileSync('example.txt').toString())
 ```
 
 Options
