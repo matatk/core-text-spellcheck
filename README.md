@@ -50,7 +50,7 @@ Callback taking a single parameter: an array of errant words that are being flag
 
 Callback taking a single parameter: a debug/log message to output.
 
-You can set this to `null` too, which allows you to easily make this setting mirror a "debug" option in your spell-checking program (as is done in [core-text-spellcheck-cli](https://github.com/matatk/core-text-spellcheck-cli/blob/master/core-text-spellcheck)).
+You can set this to `null` too, which allows you to easily make this setting mirror a "debug" option in your spell-checking program (as is done in [core-text-spellcheck-cli](https://github.com/matatk/core-text-spellcheck-cli/blob/master/index.js#L94)).
 
 **Default value:** `null`
 
