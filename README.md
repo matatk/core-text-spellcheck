@@ -5,24 +5,26 @@ core-text-spellcheck
 
 This is a basic spell-checking wrapper (for [spellchecker/hunspell](https://github.com/atom/node-spellchecker)) that can check the spelling of plain text. It is used as the basis for [markdown-it-spellcheck](https://github.com/matatk/markdown-it-spellcheck) and [html-spellcheck](https://github.com/matatk/html-spellcheck).
 
-It gives you callbacks that you can use to track any spelling errors or warnings. You can also add words to the custom dictionary, and set up a filter function to allow some pre-processing.
+It gives you callbacks that you can use to track any spelling errors or warnings. You can also add words to the custom dictionary, and set up a filter function to allow some pre-processing. You'll need to provide the code for those callbacks; the use-case envisaged is that your test suite checks spellings and can fail a build if errors are found.
 
-You'll need to provide the code for those callbacks; the use-case envisaged is that your test suite checks spellings and can fail a build if errors are found.
-
-Refer to [example.js](example.js) (and [example.txt](example.txt)) for a real-world example.
+A command-line spell-checker, [core-text-spellcheck-cli](https://github.com/matatk/core-text-spellcheck-cli), is available and provides a real-world example of using this wrapper library. A basic example that demonstrates filtering can be found in [example.js](example.js). The "hello, world" code is as follows.
 
 ```javascript
 const fs = require('fs')
-const sc = require('core-text-spellcheck')({
+const spellCheck = require('core-text-spellcheck')({
 		errors: (errors) => {
 			console.log(`Errors: ${errors.join(', ')}`)
 		},
 		warnings: (warnings) => {
 			console.log(`Warnings: ${warnings.join(', ')}`)
 		}
+		// log: null,
+		// validWords: [],
+		// warnWords: [],
+		// filter: null
 	})
 
-sc.check(fs.readFileSync('example.txt').toString())
+spellCheck(fs.readFileSync('example.txt').toString())
 ```
 
 Options
@@ -48,7 +50,7 @@ Callback taking a single parameter: an array of errant words that are being flag
 
 Callback taking a single parameter: a debug/log message to output.
 
-You can set this to `null` too, which allows you to easily make this setting mirror a "debug" option in your spell-checking program (as is done in [example.js](example.js)).
+You can set this to `null` too, which allows you to easily make this setting mirror a "debug" option in your spell-checking program (as is done in [core-text-spellcheck-cli](https://github.com/matatk/core-text-spellcheck-cli/blob/master/core-text-spellcheck)).
 
 **Default value:** `null`
 
