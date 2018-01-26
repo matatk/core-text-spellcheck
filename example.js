@@ -1,9 +1,9 @@
 'use strict'
 const fs = require('fs')
 
-function findErrorsInFile(spell, fileName) {
+function findErrorsInFile(check, fileName) {
 	console.log(`Checking file: "${fileName}"...`)
-	spell.check(fs.readFileSync(fileName).toString())
+	check(fs.readFileSync(fileName).toString())
 }
 
 function main() {
@@ -11,7 +11,7 @@ function main() {
 	let foundWarnings = 0
 	let currentFile
 
-	const sc = require('./')({
+	const spellChecker = require('./')({
 		log: (info) => {
 			console.log(`Info: ${info}`)
 		},
@@ -30,7 +30,7 @@ function main() {
 
 	for (const fileToCheck of ['example.txt']) {
 		currentFile = fileToCheck
-		findErrorsInFile(sc, fileToCheck)
+		findErrorsInFile(spellChecker, fileToCheck)
 	}
 
 	if (foundErrors > 0 || foundWarnings > 0) {

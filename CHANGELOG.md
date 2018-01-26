@@ -1,8 +1,9 @@
 Change Log
 ==========
 
-## [0.3.0](https://github.com/matatk/core-text-spellcheck/compare/0.2.0...0.3.0) (2018-01-??)
+## [0.3.0](https://github.com/matatk/core-text-spellcheck/compare/0.2.0...0.3.0) (2018-01-26)
 
+* The required module is now just one spell-checking function (`.check()` was removed for simplicity).
 * Factor out the command-line example as [core-text-spellcheck-cli](https://github.com/matatk/core-text-spellcheck-cli).
 * Tweaks to README for clarity.
 

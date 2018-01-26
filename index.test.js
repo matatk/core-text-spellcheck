@@ -127,27 +127,27 @@ describe('options-checking', () => {
 })
 
 describe('spell-checking', () => {
-	let sc
+	let spellChecker
 	let errorsMock
 	let warningsMock
 
 	beforeEach(() => {
 		errorsMock = jest.fn()
 		warningsMock = jest.fn()
-		sc = require('./')({
+		spellChecker = require('./')({
 			errors: errorsMock,
 			warnings: warningsMock
 		})
 	})
 
 	test('copes when everything is spelled correctly', () => {
-		sc.check('Fun')
+		spellChecker('Fun')
 		expect(errorsMock.mock.calls.length).toBe(0)
 		expect(warningsMock.mock.calls.length).toBe(0)
 	})
 
 	test('flags spelling errors', () => {
-		sc.check('Spellrite')
+		spellChecker('Spellrite')
 		expect(errorsMock.mock.calls.length).toBe(1)
 		expect(errorsMock.mock.calls[0][0]).toEqual(['Spellrite'])
 		expect(warningsMock.mock.calls.length).toBe(0)
@@ -159,12 +159,12 @@ describe('filtering', () => {
 		const errorsMock = jest.fn()
 		const warningsMock = jest.fn()
 		const filter = (text) => text.replace(/rite/, ' correctly')
-		const sc = require('./')({
+		const spellChecker = require('./')({
 			errors: errorsMock,
 			warnings: warningsMock,
 			filter: filter
 		})
-		sc.check('Spellrite')
+		spellChecker('Spellrite')
 		expect(errorsMock.mock.calls.length).toBe(0)
 	})
 })
@@ -175,12 +175,12 @@ describe('valid words and warning words', () => {
 	/* it('treats valid words as valid', () => {
 		const errorsMock = jest.fn()
 		const warningsMock = jest.fn()
-		const sc = require('./')({
+		const spellChecker = require('./')({
 			errors: errorsMock,
 			warnings: warningsMock,
 			validWords: ['Spellrite']
 		})
-		sc.check('Something about Spellrite')
+		spellChecker('Something about Spellrite')
 		expect(errorsMock.mock.calls.length).toBe(0)
 		expect(warningsMock.mock.calls.length).toBe(0)
 	})*/
@@ -188,12 +188,12 @@ describe('valid words and warning words', () => {
 	it('flags warning words as warnings instead of errors', () => {
 		const errorsMock = jest.fn()
 		const warningsMock = jest.fn()
-		const sc = require('./')({
+		const spellChecker = require('./')({
 			errors: errorsMock,
 			warnings: warningsMock,
 			warnWords: ['Spellrite']
 		})
-		sc.check('Something about Spellrite')
+		spellChecker('Something about Spellrite')
 		expect(errorsMock.mock.calls.length).toBe(0)
 		expect(warningsMock.mock.calls.length).toBe(1)
 		expect(warningsMock.mock.calls[0][0]).toEqual(['Spellrite'])

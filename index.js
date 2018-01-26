@@ -112,7 +112,5 @@ module.exports = (options) => {
 			text, filter, warnWords, options.errors, options.warnings)
 	}
 
-	return {
-		check
-	}
+	return check
 }
